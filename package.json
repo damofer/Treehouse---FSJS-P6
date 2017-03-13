@@ -1,0 +1,18 @@
+{
+  "name": "p6-package",
+  "version": "1.0.0",
+  "description": "Treehouse FSJS P6 ",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "treehouse"
+  ],
+  "author": "David Mogollon",
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "^0.22.0",
+    "request": "^2.81.0"
+  }
+}
