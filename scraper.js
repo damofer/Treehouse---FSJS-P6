@@ -3,12 +3,15 @@
 var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
+var moment = require('moment');
+var jsonexport = require('jsonexport');
 var url = "http://shirts4mike.com/shirts.php"
 //If folder 'data' doesnt exist, create it, if it exist, do nothing.
 var path ="./data";
 if (!fs.existsSync(path)) {
     fs.mkdirSync(path);
 }
+
 
 
 //first we need to get the info from the shirts.php page,
@@ -50,10 +53,11 @@ request(url, function (error, response, body) {
 			const price= $('span.price').text();
 			//once all the info is collected, now is time to set an object with it.
 			let item ={
-				title: title,
-				price: price,
-				image_url: 'http://www.shirts4mike.com/'+shirtPicture,
-				item_url: itemUrl
+				Title: title,
+				Price: price,
+				ImageURL: 'http://www.shirts4mike.com/'+shirtPicture,
+				URL: itemUrl,
+				Time: moment().format("HH:mm:ss")
 			};
 			// what we are trying to get is the object so now we resolve the promise asking for item.
 			
@@ -76,9 +80,37 @@ request(url, function (error, response, body) {
 
 //this function will iterate thru each promise, resolve it and then get the result as an array
 	Promise.all(itemList).then(values => { 
-  console.log(values); 
+		
+	/*Assume that the the column headers in the CSV need to be in 
+	a certain order to be correctly entered into a database.
+	 They should be in this order: Title, Price, ImageURL, URL, and Time*/
+
+		try {
+		
+		  jsonexport(values,function(err, csv){
+			    if(err) return console.log(err);
+
+
+			    var date = moment().format("YYYY-MM-DD");
+			     fs.writeFile('./data/'+date+'.csv', csv, function(err) {
+			  	if (err) console.log(err);
+				  console.log('file saved');
+				});
+			   
+			});
+		
+		
+		} catch (err) {
+		  // Errors are thrown for bad options, or if the data is empty and no fields are provided. 
+		  // Be sure to provide fields if it is possible that your data array will be empty. 
+		  console.error(err);
+		}
+
+
+
+
+
 });
  
 });
-
 
