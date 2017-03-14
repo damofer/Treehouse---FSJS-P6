@@ -14,9 +14,14 @@ if (!fs.existsSync(path)) {
 
 //first we need to get the info from the shirts.php page,
 
+
+
+
 request(url, function (error, response, body) {
 
 	// for this we use cheerio to do the trasversing as we are using jquery.
+
+	try{
 	var $ = cheerio.load(body);
 
 	var products = $(".products li a");
@@ -95,4 +100,36 @@ request(url, function (error, response, body) {
 			console.error(err);
 		}
 	});
+
+}catch(err){
+	
+}
+}).on("error", function(err){
+
+console.error("An error " + err.code + " has appeared when trying to reach the host "+err.hostname);
+
+var date = moment().format("LLLL");
+
+			if (!fs.existsSync('./log')) {
+						fs.mkdirSync('./log');				
+
+			}
+var file = './log/scraper-error.log'
+			if (!fs.existsSync(file)) {
+				fs.writeFile(file, 'This is the error log :\n', function (err) {
+					if (err) console.log(err);
+					
+				});
+			}
+
+			var errorMessage =
+
+			 date + " (An error " + err.code + " has appeared when trying to reach the host "+err.hostname +")\n";
+				
+				fs.appendFile(file,errorMessage,function(err){
+					  if(err)
+					    console.error(err);
+					 
+					});
 });
+

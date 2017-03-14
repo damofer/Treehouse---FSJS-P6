@@ -4,7 +4,9 @@
   "description": "Treehouse FSJS P6 ",
   "main": "scraper.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node scraper.js"
+
   },
   "keywords": [
     "treehouse"
